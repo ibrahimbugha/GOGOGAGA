@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Awab Al-Habal — Technical Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141F2C;
+    --ink-soft:#2A3A4B;
+    --paper:#F6F7F8;
+    --paper-page:#FFFFFF;
+    --line:#D9DCE1;
+    --line-strong:#B6BCC5;
+    --steel:#345572;
+    --steel-deep:#1E3448;
+    --amber:#B4732E;
+    --muted:#5B6470;
+    --navy-cover:#101B28;
+    --navy-cover-2:#16283A;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    font-family:'IBM Plex Sans', Arial, sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:'IBM Plex Mono', 'Courier New', monospace;}
+
+  .doc{
+    max-width:960px;
+    margin:0 auto;
+    padding:40px 0 80px;
+  }
+
+  .page{
+    position:relative;
+    background:var(--paper-page);
+    width:100%;
+    aspect-ratio:1 / 1.4142;
+    margin:0 auto 36px;
+    box-shadow:0 1px 3px rgba(20,31,44,0.08), 0 12px 32px rgba(20,31,44,0.10);
+    padding:56px 58px 50px;
+    overflow:hidden;
+  }
+
+  /* corner marks - engineering drawing motif */
+  .corner{
+    position:absolute;
+    width:16px;
+    height:16px;
+    border-color:var(--line-strong);
+    border-style:solid;
+    border-width:0;
+  }
+  .corner.tl{top:22px;left:22px;border-top-width:1.5px;border-left-width:1.5px;}
+  .corner.br{bottom:22px;right:22px;border-bottom-width:1.5px;border-right-width:1.5px;}
+
+  .titleblock{
+    position:absolute;
+    left:58px;
+    right:58px;
+    bottom:26px;
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    font-size:9.5px;
+    letter-spacing:.04em;
+    color:var(--muted);
+    border-top:1px solid var(--line);
+    padding-top:8px;
+  }
+  .titleblock span b{color:var(--ink-soft);font-weight:600;}
+
+  /* ============ COVER PAGE ============ */
+  .cover{
+    background:linear-gradient(155deg, var(--navy-cover) 0%, var(--navy-cover-2) 100%);
+    color:#EDEFF2;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+  }
+  .cover-inner{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    padding:64px 60px 0;
+  }
+  .cover .corner{border-color:rgba(237,239,242,0.35);}
+  .cover-eyebrow{
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:#8FA3B8;
+    margin-bottom:26px;
+  }
+  .cover-name{
+    font-size:44px;
+    font-weight:700;
+    letter-spacing:-.01em;
+    line-height:1.05;
+    margin:0 0 10px;
+  }
+  .cover-role{
+    font-size:17px;
+    color:#B9C6D4;
+    font-weight:500;
+    margin:0 0 30px;
+  }
+  .cover-role em{
+    color:var(--amber);
+    font-style:normal;
+    font-weight:600;
+  }
+  .cover-statement{
+    font-size:15.5px;
+    line-height:1.65;
+    color:#D3DAE1;
+    max-width:520px;
+    padding-left:16px;
+    border-left:2px solid var(--amber);
+    margin-bottom:38px;
+  }
+  .stat-strip{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+    border-top:1px solid rgba(237,239,242,0.18);
+    border-bottom:1px solid rgba(237,239,242,0.18);
+    margin-bottom:34px;
+  }
+  .stat{
+    padding:18px 16px 18px 0;
+    border-right:1px solid rgba(237,239,242,0.18);
+  }
+  .stat:last-child{border-right:none;}
+  .stat .num{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:24px;
+    font-weight:600;
+    color:#EDEFF2;
+    display:block;
+  }
+  .stat .lbl{
+    font-size:10.5px;
+    color:#93A3B4;
+    line-height:1.35;
+    margin-top:4px;
+    display:block;
+  }
+  .cover-intro{
+    font-size:13.5px;
+    line-height:1.75;
+    color:#B9C6D4;
+    max-width:560px;
+    margin-bottom:34px;
+  }
+  .toc{
+    margin-top:auto;
+    padding-top:20px;
+  }
+  .toc-title{
+    font-size:10.5px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:#8FA3B8;
+    margin-bottom:14px;
+  }
+  .toc-row{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    padding:9px 0;
+    border-top:1px solid rgba(237,239,242,0.14);
+    font-size:13.5px;
+  }
+  .toc-row .n{
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--amber);
+    font-size:12px;
+    width:20px;
+  }
+  .toc-row .t{flex:1;color:#EDEFF2;font-weight:500;}
+  .toc-row .p{
+    font-family:'IBM Plex Mono',monospace;
+    color:#8FA3B8;
+    font-size:12px;
+  }
+  .cover-footer{
+    padding:22px 60px 26px;
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+    color:#8FA3B8;
+    border-top:1px solid rgba(237,239,242,0.14);
+  }
+
+  /* ============ CONTENT PAGES ============ */
+  .kicker{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:.08em;
+    color:var(--amber);
+    margin-bottom:8px;
+  }
+  .h1{
+    font-size:24px;
+    font-weight:700;
+    color:var(--ink);
+    margin:0 0 6px;
+    letter-spacing:-.01em;
+  }
+  .h1 small{
+    display:block;
+    font-size:13.5px;
+    font-weight:500;
+    color:var(--muted);
+    margin-top:6px;
+  }
+  .tagrow{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin:16px 0 24px;
+  }
+  .tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    color:var(--steel-deep);
+    border:1px solid var(--line-strong);
+    background:#F0F3F5;
+    padding:4px 9px;
+    border-radius:2px;
+  }
+
+  .block-label{
+    font-size:10.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--steel);
+    font-weight:600;
+    margin:22px 0 8px;
+  }
+  .block-label:first-of-type{margin-top:0;}
+
+  p.body{
+    font-size:12.8px;
+    line-height:1.62;
+    color:var(--ink-soft);
+    margin:0 0 10px;
+    max-width:76ch;
+  }
+
+  ol.steps{
+    margin:0 0 4px;
+    padding-left:0;
+    list-style:none;
+    counter-reset:step;
+  }
+  ol.steps li{
+    counter-increment:step;
+    position:relative;
+    padding-left:30px;
+    font-size:12.6px;
+    line-height:1.55;
+    color:var(--ink-soft);
+    margin-bottom:11px;
+  }
+  ol.steps li::before{
+    content:counter(step);
+    position:absolute;
+    left:0;
+    top:0;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    font-weight:600;
+    color:var(--amber);
+    border:1px solid var(--amber);
+    width:19px;
+    height:19px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  ol.steps li b{color:var(--ink);font-weight:600;}
+
+  /* schematic diagram */
+  .schematic{
+    margin:18px 0 22px;
+    padding:18px 16px;
+    background:#F0F3F5;
+    border:1px solid var(--line);
+    border-radius:2px;
+  }
+  .schematic-row{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:wrap;
+  }
+  .node{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    color:var(--ink);
+    background:var(--paper-page);
+    border:1px solid var(--line-strong);
+    padding:7px 10px;
+    line-height:1.3;
+    text-align:center;
+    min-width:78px;
+  }
+  .node.blocked{border-color:#B4472E;color:#8A3520;background:#FBEEEA;}
+  .node.accent{border-color:var(--amber);color:var(--amber);font-weight:600;}
+  .arrow{color:var(--line-strong);font-size:12px;}
+
+  .metric-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    margin:18px 0 22px;
+  }
+  .metric{
+    padding:14px 12px 14px 0;
+    border-right:1px solid var(--line);
+  }
+  .metric:last-child{border-right:none;}
+  .metric .num{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:19px;
+    font-weight:600;
+    color:var(--steel-deep);
+    display:block;
+  }
+  .metric .lbl{
+    font-size:9.8px;
+    color:var(--muted);
+    line-height:1.3;
+    margin-top:4px;
+    display:block;
+  }
+
+  .impact-box{
+    margin-top:20px;
+    padding:16px 18px;
+    background:var(--steel-deep);
+    color:#E7ECEF;
+    border-radius:2px;
+    position:relative;
+  }
+  .impact-box .il{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:9.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:#8FA3B8;
+    margin-bottom:7px;
+  }
+  .impact-box p{
+    font-size:12.6px;
+    line-height:1.6;
+    margin:0;
+    color:#EDEFF2;
+  }
+
+  .note{
+    font-size:11px;
+    line-height:1.55;
+    color:var(--muted);
+    font-style:italic;
+    margin-top:12px;
+    max-width:70ch;
+  }
+
+  .two-col{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+  }
+
+  .exec-summary{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    background:#F0F3F5;
+    border-left:3px solid var(--steel);
+    padding:12px 16px;
+    margin:0 0 22px;
+  }
+  .exec-summary .el{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:9.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--steel);
+    font-weight:600;
+    white-space:nowrap;
+    padding-top:2px;
+  }
+  .exec-summary p{
+    font-size:12.6px;
+    line-height:1.55;
+    color:var(--ink);
+    margin:0;
+    font-weight:500;
+  }
+
+  .bg-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+    margin-bottom:22px;
+  }
+  .timeline-row{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    padding:10px 0;
+    border-top:1px solid var(--line);
+    font-size:12px;
+  }
+  .timeline-row .yr{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--steel);
+    width:70px;
+    flex-shrink:0;
+  }
+  .timeline-row .ev{color:var(--ink-soft);line-height:1.4;}
+  .timeline-row .ev b{color:var(--ink);font-weight:600;}
+
+  .testimonial-box{
+    margin:4px 0 22px;
+    padding:18px 20px;
+    border:1px dashed var(--line-strong);
+    background:#FAFAF9;
+  }
+  .testimonial-box .q{
+    font-size:13px;
+    line-height:1.6;
+    color:var(--muted);
+    font-style:italic;
+    margin:0 0 10px;
+  }
+  .testimonial-box .src{
+    font-size:10.5px;
+    color:var(--muted);
+    font-family:'IBM Plex Mono',monospace;
+  }
+
+  .cta-closing{
+    margin-top:22px;
+    padding:22px 24px;
+    background:var(--navy-cover);
+    color:#EDEFF2;
+    text-align:left;
+  }
+  .cta-closing .h{
+    font-size:15px;
+    font-weight:600;
+    margin:0 0 8px;
+    color:#fff;
+  }
+  .cta-closing p{
+    font-size:12.5px;
+    line-height:1.6;
+    color:#C3CCD4;
+    margin:0 0 14px;
+    max-width:60ch;
+  }
+  .contact-row{
+    display:flex;
+    gap:22px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:#8FA3B8;
+  }
+  .contact-row b{color:#EDEFF2;}
+
+  .cert-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+  }
+  .cert{
+    font-size:11.5px;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+    padding:8px 12px;
+    flex:1;
+    min-width:200px;
+  }
+  .cert b{display:block;color:var(--ink);font-size:12.5px;margin-bottom:2px;}
+
+  @media print{
+    body{background:#fff;}
+    .doc{max-width:none;padding:0;}
+    .page{
+      box-shadow:none;
+      margin:0;
+      page-break-after:always;
+      aspect-ratio:auto;
+      width:210mm;
+      min-height:297mm;
+    }
+  }
+
+  @media (max-width:900px){
+    .doc{padding:20px 12px;}
+    .page{padding:32px 24px 40px;aspect-ratio:auto;min-height:auto;}
+    .stat-strip{grid-template-columns:repeat(2,1fr);}
+    .stat:nth-child(2){border-right:none;}
+    .metric-grid{grid-template-columns:repeat(2,1fr);}
+    .metric:nth-child(2){border-right:none;}
+    .two-col{grid-template-columns:1fr;}
+    .cover-name{font-size:32px;}
+    .titleblock{position:static;margin-top:24px;border-top:1px solid var(--line);}
+  }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <!-- ============ PAGE 1 — COVER / INTRODUCTION ============ -->
+  <section class="page cover">
+    <span class="corner tl"></span><span class="corner br"></span>
+    <div class="cover-inner">
+      <div class="cover-eyebrow">Technical Portfolio — 2026</div>
+      <h1 class="cover-name">Awab Al-Habal</h1>
+      <p class="cover-role">Industrial Solutions Architect <em>—</em> Automation &amp; Digital Operations Leader</p>
+
+      <div class="cover-statement">
+        A manufacturer had already paid for a modern ERP system. It sat unused while
+        the business ran on paper. I brought it to life instead of starting over —
+        and that same approach now runs the shop floor, the data, and the security
+        review for the entire operation.
+      </div>
+
+      <div class="stat-strip">
+        <div class="stat"><span class="num">13</span><span class="lbl">ERP modules running in daily production</span></div>
+        <div class="stat"><span class="num">2,000+</span><span class="lbl">production orders processed monthly</span></div>
+        <div class="stat"><span class="num">~80%</span><span class="lbl">manual task time eliminated through automation</span></div>
+        <div class="stat"><span class="num">6 yrs</span><span class="lbl">building one factory's digital backbone, ground up</span></div>
+      </div>
+
+      <p class="cover-intro">
+        This dossier documents three deliverables from six years rebuilding the digital
+        and automation backbone of an engineer-to-order aluminum manufacturing operation —
+        from a dead-on-arrival ERP investment to a sensor-fed, self-reporting production
+        system. Each deliverable is presented technical-first: the problem as it existed
+        in the system, the architecture built to solve it, then the outcome it produced.
+      </p>
+
+      <div class="toc">
+        <div class="toc-title">Contents</div>
+        <div class="toc-row"><span class="n">01</span><span class="t">ERP Core Re-Implementation</span><span class="p">p. 02–03</span></div>
+        <div class="toc-row"><span class="n">02</span><span class="t">Shop-Floor Integration &amp; Real-Time Visibility</span><span class="p">p. 04–05</span></div>
+        <div class="toc-row"><span class="n">03</span><span class="t">Intelligent Operations — AI &amp; Extended Systems</span><span class="p">p. 06–07</span></div>
+        <div class="toc-row"><span class="n">04</span><span class="t">Background &amp; Availability</span><span class="p">p. 08</span></div>
+      </div>
+    </div>
+    <div class="cover-footer">
+      <span>Cairo, Egypt — MENA manufacturing</span>
+      <span>Open to senior technical roles &amp; consulting engagements</span>
+    </div>
+  </section>
+
+  <!-- ============ DELIVERABLE 01 — PAGE A ============ -->
+  <section class="page">
+    <span class="corner tl"></span><span class="corner br"></span>
+    <div class="kicker">01 / 04 — TECHNICAL</div>
+    <h1 class="h1">ERP Core Re-Implementation
+      <small>Rebuilding the transactional backbone of the business on Microsoft Dynamics 365 Finance &amp; Operations</small>
+    </h1>
+    <div class="tagrow">
+      <span class="tag">D365FO SCM</span><span class="tag">Finance</span><span class="tag">Asset Management</span>
+      <span class="tag">Production Control</span><span class="tag">Product Information Mgmt</span>
+    </div>
+
+    <div class="exec-summary">
+      <span class="el">Summary</span>
+      <p>A fully-paid-for ERP system sat unused for lack of a workable data model.
+        Rebuilt the core model, brought all 13 modules live, avoided a second
+        implementation cost entirely.</p>
+    </div>
+
+    <div class="block-label">Context</div>
+    <p class="body">A Dynamics 365 F&amp;O environment had been purchased but never adopted. Every
+      department continued operating on manual general-ledger entries and paper production
+      records, months behind the state of the actual business. Root-cause diagnosis traced
+      the blockage to a single structural decision in the original setup: the system's
+      Catch Weight (CW) feature, which made master planning impractical to implement and
+      complicated the costing model beyond usable.</p>
+
+    <div class="block-label">Approach</div>
+    <ol class="steps">
+      <li><b>Removed the Catch Weight feature</b> and engineered a custom batch-attribute
+        weight model — total batch weight derived from single-item weight × piece count,
+        matching how extrusion production actually works.</li>
+      <li><b>Redesigned product costing</b> to a job-order model, aligning cost flow with
+        the physical movement of item batches across production levels.</li>
+      <li><b>Rationalized the item master</b> — consolidated item variants that had been
+        defined as standalone items into proper product variants, simplifying item coding
+        and reporting.</li>
+      <li><b>Implemented maintenance and full die lifecycle tracking</b> across three
+        modules: Fixed Assets (die as capitalized asset), Production Control (die as
+        production resource), and Asset Management (maintenance history).</li>
+      <li><b>Re-enabled master planning</b>, unworkable under the old model, once the
+        batch-attribute redesign made it implementable.</li>
+    </ol>
+
+    <div class="block-label">System Flow</div>
+    <div class="schematic">
+      <div class="schematic-row">
+        <span class="node">Manual Ledger &amp; Paper Records</span>
+        <span class="arrow">→</span>
+        <span class="node blocked">Catch Weight (blocks planning &amp; costing)</span>
+        <span class="arrow">→</span>
+        <span class="node accent">Batch-Attribute Model</span>
+        <span class="arrow">→</span>
+        <span class="node">Costing + Planning + Asset Tracking</span>
+      </div>
+    </div>
+
+    <div class="titleblock">
+      <span>AWAB AL-HABAL — TECHNICAL PORTFOLIO</span>
+      <span><b>Deliverable 01</b> · ERP Core Re-Implementation</span>
+      <span>Page 02</span>
+    </div>
+  </section>
+
+  <!-- ============ DELIVERABLE 01 — PAGE B ============ -->
+  <section class="page">
+    <span class="corner tl"></span><span class="corner br"></span>
+    <div class="kicker">01 / 04 — OUTCOME</div>
+    <h1 class="h1">ERP Core Re-Implementation
+      <small>Rollout scope and results — go-live January 2026</small>
+    </h1>
+
+    <div class="exec-summary">
+      <span class="el">Summary</span>
+      <p>13 modules now carry 2,000+ production orders and 150+ invoices a month —
+        at roughly half the cost of restarting the implementation from scratch.</p>
+    </div>
+
+    <div class="block-label">Rollout</div>
+    <p class="body">All 13 business modules — finance, sales, purchasing, inventory,
+      production, asset management, and costing — brought live in sequence rather than
+      restarted from a fresh implementation. The existing technology investment was made
+      operational instead of replaced.</p>
+
+    <div class="block-label">Results</div>
+    <div class="metric-grid">
+      <div class="metric"><span class="num">13</span><span class="lbl">modules live and in daily use</span></div>
+      <div class="metric"><span class="num">30</span><span class="lbl">active users across departments</span></div>
+      <div class="metric"><span class="num">150+</span><span class="lbl">invoices processed monthly</span></div>
+      <div class="metric"><span class="num">2,000+</span><span class="lbl">production orders monthly</span></div>
+    </div>
+    <p class="body">Delivered at roughly half the cost of a full outside-consultant
+      re-implementation.</p>
+
+    <div class="block-label">Additional Technical Notes</div>
+    <p class="body">The batch-attribute redesign also removed the last blocker to master
+      planning, which had been carried as unimplementable under the original configuration.
+      Item master rationalization and die lifecycle tracking were delivered as extensions
+      of the same core rebuild, not separate initiatives — each depended on the batch and
+      costing model being correct first.</p>
+
+    <div class="impact-box">
+      <div class="il">Business impact</div>
+      <p>The company's existing ERP investment became the system the business actually
+        runs on — without paying for a second implementation, and without an outside
+        consultant carrying the knowledge out the door when the project ended.</p>
+    </div>
+
+    <div class="titleblock">
+      <span>AWAB AL-HABAL — TECHNICAL PORTFOLIO</span>
+      <span><b>Deliverable 01</b> · ERP Core Re-Implementation</span>
+      <span>Page 03</span>
+    </div>
+  </section>
+
+  <!-- ============ DELIVERABLE 02 — PAGE A ============ -->
+  <section class="page">
+    <span class="corner tl"></span><span class="corner br"></span>
+    <div class="kicker">02 / 04 — TECHNICAL</div>
+    <h1 class="h1">Shop-Floor Integration &amp; Real-Time Visibility
+      <small>Connecting production data to the system automatically, and making it visible</small>
+    </h1>
+    <div class="tagrow">
+      <span class="tag">MES Integration</span><span class="tag">SQL / SSAS</span>
+      <span class="tag">Power BI</span><span class="tag">D365FO Production Control</span>
+    </div>
+
+    <div class="exec-summary">
+      <span class="el">Summary</span>
+      <p>Production data took 2+ days to reach management on paper. Built an
+        automated data pipeline and dashboard suite that cut that to roughly
+        2 hours, with cross-departmental reporting that didn't exist before.</p>
+    </div>
+
+    <div class="block-label">Context</div>
+    <p class="body">Production data was recorded on paper and transcribed into Excel by
+      hand. Aggregate figures reached management with a lag of 2+ days, true aggregates
+      were only available weekly or at month-end, and cross-departmental performance
+      indicators were practically impossible to produce or validate manually.</p>
+
+    <div class="block-label">Approach</div>
+    <ol class="steps">
+      <li><b>Designed the MES-to-D365FO integration pattern</b> for automated transaction
+        posting, with integrity controls built into the flow that remove the user's
+        ability to modify or corrupt open transactions.</li>
+      <li><b>Architected a custom Entity Store model</b> — the "Production Cube" — on the
+        SQL/SSAS aggregate measurement architecture, consolidating inventory transactions,
+        route/process-time transactions, and reference data including product
+        classification and customer attributes.</li>
+      <li><b>Built a 6-report Power BI suite</b>, embedded directly as workspace pages
+        inside D365FO: daily and monthly quantities, per-process cycle times, productivity,
+        and scrap ratio by section, plus department-wide totals.</li>
+      <li><b>Extended coverage to die manufacturing</b> — dies produced daily, monthly,
+        and per customer.</li>
+      <li><b>Automated custom-product setup</b>, previously a manual process spanning
+        multiple forms for every new made-to-order product.</li>
+    </ol>
+
+    <div class="block-label">Data Flow</div>
+    <div class="schematic">
+      <div class="schematic-row">
+        <span class="node">Shop Floor / MES</span>
+        <span class="arrow">→</span>
+        <span class="node accent">Integration Layer (integrity controls)</span>
+        <span class="arrow">→</span>
+        <span class="node">D365FO</span>
+        <span class="arrow">→</span>
+        <span class="node">Production Cube (SSAS)</span>
+        <span class="arrow">→</span>
+        <span class="node">Power BI Dashboards</span>
+      </div>
+    </div>
+
+    <div class="titleblock">
+      <span>AWAB AL-HABAL — TECHNICAL PORTFOLIO</span>
+      <span><b>Deliverable 02</b> · Shop-Floor Integration &amp; Visibility</span>
+      <span>Page 04</span>
+    </div>
+  </section>
+
+  <!-- ============ DELIVERABLE 02 — PAGE B ============ -->
+  <section class="page">
+    <span class="corner tl"></span><span class="corner br"></span>
+    <div class="kicker">02 / 04 — OUTCOME</div>
+    <h1 class="h1">Shop-Floor Integration &amp; Real-Time Visibility
+      <small>From paper records to hourly-refreshed, cross-departmental reporting</small>
+    </h1>
+
+    <div class="exec-summary">
+      <span class="el">Summary</span>
+      <p>Four manual bottlenecks closed at once — reporting lag, order entry time,
+        product setup time, and the absence of any cross-department data to trust.</p>
+    </div>
+
+    <div class="block-label">Results</div>
+    <div class="metric-grid">
+      <div class="metric"><span class="num">2+ days → ~2 hrs</span><span class="lbl">management data latency</span></div>
+      <div class="metric"><span class="num">20-30 → 3-5 min</span><span class="lbl">order entry time</span></div>
+      <div class="metric"><span class="num">30-60 → 2-5 min</span><span class="lbl">custom product setup</span></div>
+      <div class="metric"><span class="num">~80%</span><span class="lbl">reduction, product setup time</span></div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="block-label">What changed</div>
+        <p class="body">Cross-functional reporting that was previously impossible on
+          paper became routine: stage-by-stage productivity comparison across production
+          stages, an inter-departmental synchronization view, and validated scrap and
+          productivity indicators across all departments — with data validation for the
+          first time.</p>
+      </div>
+      <div>
+        <div class="block-label">Technical notes</div>
+        <p class="body">The integration layer's integrity controls were deliberate: the
+          MES posts transactions automatically and the design removes any path for a user
+          to modify an open transaction, closing a class of data-quality risk before it
+          could occur rather than reconciling it after the fact.</p>
+      </div>
+    </div>
+
+    <div class="impact-box">
+      <div class="il">Business impact</div>
+      <p>Leadership sees the floor as it happens. A decision that used to wait for a
+        week-end report — a bottleneck, a scrap spike, a customer's order status — is
+        now visible the same shift it occurs.</p>
+    </div>
+
+    <div class="titleblock">
+      <span>AWAB AL-HABAL — TECHNICAL PORTFOLIO</span>
+      <span><b>Deliverable 02</b> · Shop-Floor Integration &amp; Visibility</span>
+      <span>Page 05</span>
+    </div>
+  </section>
+
+  <!-- ============ DELIVERABLE 03 — PAGE A ============ -->
+  <section class="page">
+    <span class="corner tl"></span><span class="corner br"></span>
+    <div class="kicker">03 / 04 — TECHNICAL</div>
+    <h1 class="h1">Intelligent Operations — AI &amp; Extended Systems
+      <small>Applying AI agents to operational review, and extending system scope beyond the factory floor</small>
+    </h1>
+    <div class="tagrow">
+      <span class="tag">Azure Security</span><span class="tag">AI Agent Design</span>
+      <span class="tag">D365FO Landed Cost</span><span class="tag">Transportation Mgmt</span>
+    </div>
+
+    <div class="exec-summary">
+      <span class="el">Summary</span>
+      <p>Built a reusable AI-agent pipeline for security review from scratch, and
+        extended the ERP's scope to cover inbound and outbound logistics costing —
+        both delivered in-house, no outside vendor.</p>
+    </div>
+
+    <div class="block-label">Context</div>
+    <p class="body">Two parallel initiatives extending the system's reach: the company's
+      Azure subscription had no structured, repeatable process for security review; and
+      inbound import costs together with outbound transportation had remained outside
+      system scope, carried as pending work beyond the January 2026 go-live.</p>
+
+    <div class="block-label">Approach — AI-Assisted Security Review</div>
+    <ol class="steps">
+      <li><b>Scripted automated extraction</b> of targeted security configuration reports
+        from the Azure subscription.</li>
+      <li><b>Built a purpose-designed AI agent</b>, using Claude, to analyze the extracted
+        reports against a structured review standard.</li>
+      <li><b>Ran the pipeline end-to-end</b> to produce a repeatable security assessment —
+        a process that did not exist before, now available on demand rather than as a
+        one-off manual exercise.</li>
+    </ol>
+
+    <div class="block-label">Approach — Extended Logistics Scope</div>
+    <ol class="steps">
+      <li><b>Configured the Landed Cost module</b> for inbound shipment costing.</li>
+      <li><b>Configured Transportation Management (TMS)</b> for outbound shipment logistics.</li>
+      <li><b>Leading end-user training</b> on both modules ahead of go-live.</li>
+    </ol>
+
+    <div class="block-label">AI Review Pipeline</div>
+    <div class="schematic">
+      <div class="schematic-row">
+        <span class="node">Azure Config Data</span>
+        <span class="arrow">→</span>
+        <span class="node">Extraction Scripts</span>
+        <span class="arrow">→</span>
+        <span class="node accent">Claude Agent (Analysis)</span>
+        <span class="arrow">→</span>
+        <span class="node">Structured Security Report</span>
+      </div>
+    </div>
+
+    <div class="titleblock">
+      <span>AWAB AL-HABAL — TECHNICAL PORTFOLIO</span>
+      <span><b>Deliverable 03</b> · Intelligent Operations</span>
+      <span>Page 06</span>
+    </div>
+  </section>
+
+  <!-- ============ DELIVERABLE 03 — PAGE B ============ -->
+  <section class="page">
+    <span class="corner tl"></span><span class="corner br"></span>
+    <div class="kicker">03 / 04 — OUTCOME</div>
+    <h1 class="h1">Intelligent Operations — AI &amp; Extended Systems
+      <small>Status and what this establishes for the systems ahead</small>
+    </h1>
+
+    <div class="exec-summary">
+      <span class="el">Summary</span>
+      <p>Security review went from non-existent to a repeatable, on-demand process.
+        Logistics costing — previously outside system scope entirely — is in
+        active rollout with training underway.</p>
+    </div>
+
+    <div class="block-label">Status</div>
+    <p class="body">The AI-assisted security review process is complete and repeatable —
+      it can be re-run on demand rather than commissioned as a one-off exercise. Landed
+      Cost and Transportation Management are in progress, with user training underway
+      ahead of go-live.</p>
+
+    <div class="note">Note: specific security audit findings are confidential and are not
+      reproduced here. What is shown is the methodology — a self-built, agent-assisted
+      review pipeline designed in-house.</div>
+
+    <div class="block-label">Why this matters beyond the two projects</div>
+    <p class="body">Both initiatives follow the same underlying pattern as the ERP
+      rebuild and the shop-floor integration: identify a gap in system scope, build the
+      capability in-house rather than commissioning it externally, and make it repeatable
+      rather than a one-time fix. The AI agent pipeline in particular is a template —
+      the same approach (script the data extraction, build a purpose-designed agent,
+      structure the output) applies to other operational review problems, not just
+      security.</p>
+
+    <div class="impact-box">
+      <div class="il">Business impact</div>
+      <p>Every new system boundary — security, logistics, cost — gets brought inside the
+        same structured, self-sufficient approach: build it in-house, make it repeatable,
+        and don't outsource the thinking that should stay close to the business.</p>
+    </div>
+
+    <div class="titleblock">
+      <span>AWAB AL-HABAL — TECHNICAL PORTFOLIO</span>
+      <span><b>Deliverable 03</b> · Intelligent Operations</span>
+      <span>Page 07</span>
+    </div>
+  </section>
+
+  <!-- ============ PAGE 8 — BACKGROUND & AVAILABILITY ============ -->
+  <section class="page">
+    <span class="corner tl"></span><span class="corner br"></span>
+    <div class="kicker">04 / 04 — BACKGROUND</div>
+    <h1 class="h1">Background &amp; Availability
+      <small>Career context, credentials, and how to reach him</small>
+    </h1>
+
+    <div class="bg-grid">
+      <div>
+        <div class="block-label">Career Timeline</div>
+        <div class="timeline-row"><span class="yr">Year 1</span><span class="ev">Joined as <b>Data Analyst</b> — first system visibility work on production reporting.</span></div>
+        <div class="timeline-row"><span class="yr">Years 2–4</span><span class="ev">Took on the dormant D365FO environment; led the core re-implementation program.</span></div>
+        <div class="timeline-row"><span class="yr">Years 4–6</span><span class="ev">Built the company's first in-house technical department — previously fully outsourced.</span></div>
+        <div class="timeline-row"><span class="yr">Now</span><span class="ev"><b>Head of IT &amp; Digital Solutions</b> — one company, six years, continuous scope expansion.</span></div>
+      </div>
+      <div>
+        <div class="block-label">Certifications &amp; Credentials</div>
+        <div class="cert-row" style="flex-direction:column;">
+          <div class="cert"><b>PMP</b>Project Management Professional</div>
+          <div class="cert"><b>AB-100 — Agentic AI (in progress)</b>Microsoft Agentic AI architecture certification path</div>
+        </div>
+        <div class="block-label">Core Range</div>
+        <p class="body">ERP architecture (D365FO) · BI &amp; data modeling (SSAS/Power BI)
+          · shop-floor integration (MES) · AI agent design · cloud security review ·
+          technical team building — one person covering the full stack between the
+          factory floor and the executive dashboard.</p>
+      </div>
+    </div>
+
+    <div class="block-label">What Colleagues Say</div>
+    <div class="testimonial-box">
+      <p class="q">"[Testimonial — one or two sentences on outcome and working style — to be added.]"</p>
+      <span class="src">— [Name, Role], CANEX Aluminum</span>
+    </div>
+
+    <div class="cta-closing">
+      <p class="h">Open to the next challenge</p>
+      <p>Currently employed full-time as Head of IT &amp; Digital Solutions, and open
+        to conversations about senior technical leadership roles or consulting
+        engagements with manufacturers facing similar system, data, or automation
+        gaps — particularly in engineer-to-order and custom-manufacturing environments.</p>
+      <div class="contact-row">
+        <span><b>LinkedIn</b> — [profile URL]</span>
+        <span><b>Email</b> — [email address]</span>
+        <span><b>Location</b> — Cairo, Egypt</span>
+      </div>
+    </div>
+
+    <div class="titleblock">
+      <span>AWAB AL-HABAL — TECHNICAL PORTFOLIO</span>
+      <span><b>Background</b> · Availability</span>
+      <span>Page 08</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
